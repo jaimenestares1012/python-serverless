@@ -1,0 +1,64 @@
+
+
+service: myserverlesspython
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.7
+
+
+functions:
+  hello:
+    handler: handler.hello
+  test:
+    handler: lambdas/endpoints/test.handler
+    events:
+      - http:
+          path: test-python
+          method: GET
+          cors: true
+
+  prueba:
+    handler: test.lambda_handler
+    package:
+      include:
+        - requirements.txt
+    events:
+      - http:
+          path: pruebita
+          method: GET
+          cors: true
+          
+  registrarUsuario:
+    handler: lambdas/endpoints/registrarUsuario.handler
+    package:
+      include:
+        - requirements.txt
+    events:
+      - http:
+          path: registrarUsuario
+          method: POST
+          cors: true
+
+
+  uploadPdf:
+      handler: lambdas/endpoints/uploadPdf.handler
+      package:
+        include:
+          - requirements.txt
+      events:
+        - http:
+            path: uploadPdf
+            method: POST
+            cors: true
+
+plugins:
+  - serverless-offline
+  - serverless-python-requirements
+
+
+custom:
+  pythonRequierements:
+    dockerizePio: non-linux
